@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .content{
+            font-size: 4rem;
+        }
+    </style>
+</head>
+
+<body>
+    <p class="content"></p>
+    <button style="width: 20rem;height: 10rem;font-size: 4rem;" id="ajaxButton">获取</button>
+    <script>
+        (() => {
+            console.log();
+            let httpRequest;
+            document
+                .getElementById("ajaxButton")
+                .addEventListener("click", makeRequest);
+            function makeRequest() {
+                httpRequest = new XMLHttpRequest();
+                if (!httpRequest) {
+                    alert("放弃了 :( 不能创建 XMLHTTP 实例");
+                    return false;
+                }
+                httpRequest.onreadystatechange = alertContents;
+                httpRequest.open("POST", "http://localhost:8000/api/animal/add");
+                httpRequest.setRequestHeader('Content-Type', 'application/json');
+                httpRequest.send(JSON.stringify({name: 'Don', age: 24,gender1:'male'}));
+            }
+            function alertContents() {
+                if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                    if (httpRequest.status === 200) {
+                        // alert(httpRequest.responseText);
+                        document.querySelector(".content").innerHTML=httpRequest.responseText
+                    } else {
+                        alert("请求遇到了问题。");
+                    }
+                }
+            }
+        })();
+    </script>
+</body>
+
+</html>
